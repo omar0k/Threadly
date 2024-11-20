@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Note, Community
+from .models import Thread, Community
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -14,9 +14,9 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class NoteSerializer(serializers.ModelSerializer):
+class ThreadSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Note
+        model = Thread
         fields = ["id", "title", "content", "created_at", "author"]
         extra_kwargs = {"author": {"read_only": True}}
 

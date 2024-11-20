@@ -3,8 +3,12 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("notes/", views.NoteListCreateView.as_view(), name="note-list"),
-    path("notes/delete/<int:pk>/", views.NoteDeleteView.as_view(), name="delete-note"),
+    path("threads/", views.ThreadListCreateView.as_view(), name="thread-list"),
+    path(
+        "threads/delete/<int:pk>/",
+        views.ThreadDeleteView.as_view(),
+        name="delete-thread",
+    ),
     path(
         "communities/", views.CommunityListCreateView.as_view(), name="community-list"
     ),
@@ -18,5 +22,14 @@ urlpatterns = [
         views.JoinCommunity.as_view(),
         name="join-community",
     ),
-    
+    path(
+        "communities/leave/<int:community_id>/",
+        views.LeaveCommunity.as_view(),
+        name="leave-community",
+    ),
+    path(
+        "communities/<int:community_id>/threads/",
+        views.CommunityThreadsView.as_view(),
+        name="community-threads",
+    ),
 ]
