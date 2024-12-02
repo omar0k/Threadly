@@ -10,6 +10,7 @@ class CommunityAdmin(admin.ModelAdmin):
         "description",
         "created_at",
         "list_members",
+        "image",
     )  # Customize columns
     search_fields = ("name", "description")  # Add search functionality
 

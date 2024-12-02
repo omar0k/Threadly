@@ -7,6 +7,7 @@ class Community(models.Model):
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     members = models.ManyToManyField(User, related_name="communities", blank=True)
+    image = models.ImageField(upload_to="community_images/", blank=True, null=True)
 
 
 class Thread(models.Model):

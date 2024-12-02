@@ -22,6 +22,13 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 
 class CommunitySerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+
     class Meta:
         model = Community
-        fields = ["id", "name", "description", "created_at", "members"]
+        fields = ["id", "name", "description", "created_at", "members", "image_url"]
+
+    def get_image_url(self, obj):
+        if obj.image:
+            return obj.image.url
+        return None
