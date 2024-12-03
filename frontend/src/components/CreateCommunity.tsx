@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,12 +8,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { PlusIcon } from "lucide-react";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Textarea } from "./ui/textarea";
 import api from "@/api";
 import { Community } from "@/types";
+import { ACCESS_TOKEN } from "@/constants";
 
 interface CreateCommunityProps {
   onCommunityCreated: (newCommunity: Community) => void;
@@ -22,8 +22,10 @@ export function CreateCommunity({ onCommunityCreated }: CreateCommunityProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [communityName, setCommunityName] = useState("");
   const [communityDescription, setCommunityDescription] = useState("");
+  const [nameInputError, setNameInputError] = useState(false);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (nameInputError) return;
     const response = await api.post("/api/communities/", {
       name: communityName,
       description: communityDescription,
@@ -52,15 +54,31 @@ export function CreateCommunity({ onCommunityCreated }: CreateCommunityProps) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Input
-              className="bg-gray-300"
+              className={`bg-gray-300 ${
+                nameInputError
+                  ? "focus-visible:ring-red-500 border-red-500"
+                  : ""
+              }`}
               id="community-name"
               value={communityName}
-              onChange={(e) => setCommunityName(e.target.value)}
+              onChange={(e) => {
+                setNameInputError(false);
+                if (/[^a-zA-Z0-9_]/g.test(e.target.value)) {
+                  setNameInputError(true);
+                }
+                setCommunityName(e.target.value);
+                console.log(communityName);
+              }}
               minLength={3}
               required
               maxLength={21}
               placeholder="Enter community name"
             />
+            {nameInputError && (
+              <span className="ml-3 text-xs text-red-500">
+                Only letters, numbers and underscore are allowed
+              </span>
+            )}
             <Textarea
               maxLength={500}
               required
@@ -69,7 +87,7 @@ export function CreateCommunity({ onCommunityCreated }: CreateCommunityProps) {
               placeholder="Describe your community"
             />
           </div>
-          <Button className="w-1/4" type="submit">
+          <Button disabled={nameInputError} className="w-1/4" type="submit">
             Create
           </Button>
         </form>
