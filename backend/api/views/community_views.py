@@ -1,7 +1,9 @@
+from re import search
 from urllib import response
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from ..models import Community, Thread
+from django.contrib.auth.decorators import login_required
 from ..serializers import CommunitySerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,14 +11,23 @@ from rest_framework.response import Response
 
 class CommunityListCreateView(generics.ListCreateAPIView):
     serializer_class = CommunitySerializer
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Community.objects.filter(members=self.request.user)
+
+        search_term = self.request.query_params.get("name")
+        if search_term:
+            return Community.objects.filter(name=search_term)
+        else:
+            return Community.objects.all()
 
     def perform_create(self, serializer):
         community = serializer.save()
         community.members.add(self.request.user)
+
+    def get_permissions(self):
+        if self.request.method == "POST":
+            return [IsAuthenticated()]
+        return [AllowAny()]
 
 
 class CommunityThreadsView(generics.ListAPIView):

@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 
 
 class Community(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    description = models.TextField(blank=True, null=True)
+    name = models.CharField(max_length=21, unique=True)
+    description = models.TextField(max_length=500, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     members = models.ManyToManyField(User, related_name="communities", blank=True)
     image = models.ImageField(upload_to="community_images/", blank=True, null=True)
