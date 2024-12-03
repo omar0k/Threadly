@@ -1,7 +1,6 @@
 import { Community } from "@/types";
 import React, { useEffect, useState } from "react";
 import SidebarTab from "./SidebarTab";
-import { PlusIcon } from "lucide-react";
 import { CreateCommunity } from "../CreateCommunity";
 import api from "@/api";
 interface SidebarProps {

@@ -12,7 +12,6 @@ const Home = () => {
     <div className="flex">
       {/* <Button onClick={Logout}>Logout</Button> */}
       {/* Sidebar */}
-      <Sidebar />
       <div>Threads feed</div>
       {/* <div></div> */}
     </div>
